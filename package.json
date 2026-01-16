@@ -1,0 +1,65 @@
+{
+  "name": "processing-creative-skill",
+  "version": "1.0.0",
+  "description": "Claude Code skill for Processing/p5.js creative coding - generate graphics, animations, and generative art",
+  "keywords": [
+    "processing",
+    "p5js",
+    "creative-coding",
+    "generative-art",
+    "claude-code",
+    "claude-skill",
+    "visualization",
+    "animation"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/processing-creative-skill"
+  },
+  "scripts": {
+    "dev": "live-server templates --port=3000",
+    "convert:gif": "bash scripts/convert-frames.sh",
+    "convert:mp4": "bash scripts/convert-frames.sh --mp4",
+    "install:processing": "node scripts/install-processing.js",
+    "setup": "npm run install:deps && npm run install:processing",
+    "install:deps": "npm install",
+    "test": "node scripts/test-patterns.js"
+  },
+  "dependencies": {
+    "p5": "^1.9.4"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "puppeteer": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "skill/",
+    "scripts/",
+    "templates/",
+    "patterns/",
+    "examples/",
+    "docs/"
+  ],
+  "claudeSkill": {
+    "name": "processing-creative",
+    "triggers": [
+      "processing",
+      "p5.js",
+      "p5js",
+      "generative art",
+      "creative coding",
+      "animated background",
+      "particle system",
+      "visual design code",
+      "canvas animation",
+      "flow field",
+      "perlin noise"
+    ],
+    "skillFile": "skill/processing-creative.md"
+  }
+}

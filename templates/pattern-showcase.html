@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Processing Creative - Pattern Showcase</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0d1117;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(13, 17, 23, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .header h1 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .pattern-select {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .pattern-btn {
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.85rem;
+    }
+
+    .pattern-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .pattern-btn.active {
+      background: #3a86ff;
+      border-color: #3a86ff;
+    }
+
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+
+    .info-panel {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      background: rgba(13, 17, 23, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      max-width: 350px;
+      z-index: 100;
+    }
+
+    .info-panel h3 {
+      margin-bottom: 0.5rem;
+      color: #3a86ff;
+    }
+
+    .info-panel p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    .controls {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .controls span {
+      display: block;
+      font-size: 0.8rem;
+      opacity: 0.6;
+      margin-bottom: 0.5rem;
+    }
+
+    kbd {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin: 0.1rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Processing Creative Patterns</h1>
+    <div class="pattern-select">
+      <button class="pattern-btn active" data-pattern="particles">Particles</button>
+      <button class="pattern-btn" data-pattern="flowfield">Flow Field</button>
+      <button class="pattern-btn" data-pattern="grid">Grid</button>
+      <button class="pattern-btn" data-pattern="waves">Waves</button>
+      <button class="pattern-btn" data-pattern="gradient">Gradient</button>
+    </div>
+  </header>
+
+  <div id="canvas-container"></div>
+
+  <div class="info-panel">
+    <h3 id="pattern-title">Particle System</h3>
+    <p id="pattern-desc">Interactive particles with dynamic connections. Move your mouse to influence particle behavior.</p>
+    <div class="controls">
+      <span>Keyboard Controls:</span>
+      <kbd>S</kbd> Save PNG
+      <kbd>R</kbd> Reset
+      <kbd>1-5</kbd> Switch Pattern
+    </div>
+  </div>
+
+  <script>
+    // Pattern descriptions
+    const patternInfo = {
+      particles: {
+        title: 'Particle System',
+        desc: 'Interactive particles with dynamic connections. Move your mouse to influence particle behavior.'
+      },
+      flowfield: {
+        title: 'Flow Field',
+        desc: 'Organic flowing lines using Perlin noise. Creates beautiful, natural-looking movement patterns.'
+      },
+      grid: {
+        title: 'Geometric Grid',
+        desc: 'Interactive grid of shapes that respond to mouse position. Great for tech-style backgrounds.'
+      },
+      waves: {
+        title: 'Wave Animation',
+        desc: 'Layered sine waves creating a flowing, oceanic effect. Smooth and hypnotic.'
+      },
+      gradient: {
+        title: 'Animated Gradient',
+        desc: 'Smooth color transitions with aurora-like effects. Perfect for hero backgrounds.'
+      }
+    };
+
+    let currentPattern = 'particles';
+    let particles = [];
+    let flowField = [];
+    let cols, rows;
+    const SCALE = 20;
+
+    function setup() {
+      let canvas = createCanvas(windowWidth, windowHeight);
+      canvas.parent('canvas-container');
+      initPattern();
+    }
+
+    function initPattern() {
+      particles = [];
+      flowField = [];
+
+      switch (currentPattern) {
+        case 'particles':
+          for (let i = 0; i < 150; i++) {
+            particles.push(new Particle());
+          }
+          break;
+        case 'flowfield':
+          cols = floor(width / SCALE);
+          rows = floor(height / SCALE);
+          for (let i = 0; i < 800; i++) {
+            particles.push(new FlowParticle());
+          }
+          background(0);
+          break;
+        case 'grid':
+          // No init needed
+          break;
+        case 'waves':
+          // No init needed
+          break;
+        case 'gradient':
+          // No init needed
+          break;
+      }
+    }
+
+    function draw() {
+      switch (currentPattern) {
+        case 'particles':
+          drawParticles();
+          break;
+        case 'flowfield':
+          drawFlowField();
+          break;
+        case 'grid':
+          drawGrid();
+          break;
+        case 'waves':
+          drawWaves();
+          break;
+        case 'gradient':
+          drawGradient();
+          break;
+      }
+    }
+
+    // ============================================
+    // PARTICLES
+    // ============================================
+    class Particle {
+      constructor() {
+        this.pos = createVector(random(width), random(height));
+        this.vel = createVector(random(-0.5, 0.5), random(-0.5, 0.5));
+        this.size = random(2, 4);
+        this.alpha = random(100, 200);
+      }
+
+      update() {
+        this.pos.add(this.vel);
+        if (this.pos.x < 0) this.pos.x = width;
+        if (this.pos.x > width) this.pos.x = 0;
+        if (this.pos.y < 0) this.pos.y = height;
+        if (this.pos.y > height) this.pos.y = 0;
+      }
+
+      display() {
+        noStroke();
+        fill(100, 200, 255, this.alpha);
+        ellipse(this.pos.x, this.pos.y, this.size);
+      }
+    }
+
+    function drawParticles() {
+      background(13, 17, 23);
+
+      for (let p of particles) {
+        p.update();
+        p.display();
+
+        for (let other of particles) {
+          let d = dist(p.pos.x, p.pos.y, other.pos.x, other.pos.y);
+          if (d < 100 && d > 0) {
+            stroke(100, 200, 255, map(d, 0, 100, 100, 0));
+            strokeWeight(0.5);
+            line(p.pos.x, p.pos.y, other.pos.x, other.pos.y);
+          }
+        }
+      }
+    }
+
+    // ============================================
+    // FLOW FIELD
+    // ============================================
+    class FlowParticle {
+      constructor() {
+        this.pos = createVector(random(width), random(height));
+        this.vel = createVector(0, 0);
+        this.prevPos = this.pos.copy();
+        this.hue = random(200, 280);
+      }
+
+      update() {
+        let x = floor(this.pos.x / SCALE);
+        let y = floor(this.pos.y / SCALE);
+        let index = x + y * cols;
+        let force = flowField[index];
+        if (force) this.vel.add(force);
+        this.vel.limit(2);
+        this.pos.add(this.vel);
+
+        if (this.pos.x < 0 || this.pos.x > width ||
+            this.pos.y < 0 || this.pos.y > height) {
+          this.pos = createVector(random(width), random(height));
+          this.prevPos = this.pos.copy();
+        }
+      }
+
+      display() {
+        colorMode(HSB, 360, 100, 100, 100);
+        stroke(this.hue, 80, 100, 30);
+        strokeWeight(1);
+        line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
+        this.prevPos = this.pos.copy();
+        colorMode(RGB);
+      }
+    }
+
+    let zoff = 0;
+    function drawFlowField() {
+      // Update flow field
+      let yoff = 0;
+      for (let y = 0; y < rows; y++) {
+        let xoff = 0;
+        for (let x = 0; x < cols; x++) {
+          let index = x + y * cols;
+          let angle = noise(xoff, yoff, zoff) * TWO_PI * 4;
+          flowField[index] = p5.Vector.fromAngle(angle).setMag(0.5);
+          xoff += 0.1;
+        }
+        yoff += 0.1;
+      }
+      zoff += 0.002;
+
+      // Semi-transparent background for trails
+      background(0, 5);
+
+      for (let p of particles) {
+        p.update();
+        p.display();
+      }
+    }
+
+    // ============================================
+    // GRID
+    // ============================================
+    function drawGrid() {
+      background(13, 17, 23);
+
+      let gridSize = 60;
+      for (let x = gridSize/2; x < width + gridSize; x += gridSize) {
+        for (let y = gridSize/2; y < height + gridSize; y += gridSize) {
+          let d = dist(mouseX, mouseY, x, y);
+          let size = map(d, 0, 200, gridSize * 0.9, gridSize * 0.2);
+          size = constrain(size, gridSize * 0.2, gridSize * 0.9);
+          let rotation = map(d, 0, 200, PI/4, 0);
+
+          push();
+          translate(x, y);
+          rotate(rotation);
+          rectMode(CENTER);
+          noFill();
+          stroke(100, 200, 255, map(d, 0, 300, 255, 100));
+          strokeWeight(2);
+          rect(0, 0, size, size, 3);
+          pop();
+        }
+      }
+    }
+
+    // ============================================
+    // WAVES
+    // ============================================
+    function drawWaves() {
+      background(13, 17, 23);
+
+      let colors = ['#FF006E', '#8338EC', '#3A86FF', '#06D6A0', '#FFD166'];
+
+      for (let j = 0; j < 5; j++) {
+        let yOffset = map(j, 0, 4, height * 0.3, height * 0.7);
+        noFill();
+        stroke(colors[j]);
+        strokeWeight(3);
+
+        beginShape();
+        for (let x = 0; x <= width; x += 5) {
+          let y = yOffset +
+            sin(x * 0.02 + frameCount * 0.03 + j * 0.5) * 80 +
+            sin(x * 0.04 + frameCount * 0.045) * 30;
+          vertex(x, y);
+        }
+        endShape();
+      }
+    }
+
+    // ============================================
+    // GRADIENT
+    // ============================================
+    function drawGradient() {
+      // Aurora effect
+      background(10, 10, 30);
+
+      let colors = ['#00ff87', '#60efff', '#00ff87', '#ff61d2', '#60efff'];
+
+      for (let band = 4; band >= 0; band--) {
+        let yBase = map(band, 0, 4, height * 0.2, height * 0.6);
+        let col = color(colors[band]);
+        col.setAlpha(80);
+
+        noStroke();
+        fill(col);
+
+        beginShape();
+        vertex(0, height);
+
+        for (let x = 0; x <= width; x += 5) {
+          let noiseVal = noise(x * 0.003, band * 0.5, frameCount * 0.005);
+          let y = yBase + noiseVal * 200 - 100;
+          vertex(x, y);
+        }
+
+        vertex(width, height);
+        endShape(CLOSE);
+      }
+    }
+
+    // ============================================
+    // CONTROLS
+    // ============================================
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+      initPattern();
+    }
+
+    function keyPressed() {
+      if (key === 's') {
+        saveCanvas('pattern-' + currentPattern, 'png');
+      }
+      if (key === 'r') {
+        initPattern();
+      }
+      if (key === '1') switchPattern('particles');
+      if (key === '2') switchPattern('flowfield');
+      if (key === '3') switchPattern('grid');
+      if (key === '4') switchPattern('waves');
+      if (key === '5') switchPattern('gradient');
+    }
+
+    function switchPattern(pattern) {
+      currentPattern = pattern;
+      initPattern();
+      updateUI();
+    }
+
+    function updateUI() {
+      // Update buttons
+      document.querySelectorAll('.pattern-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.pattern === currentPattern) {
+          btn.classList.add('active');
+        }
+      });
+
+      // Update info panel
+      const info = patternInfo[currentPattern];
+      document.getElementById('pattern-title').textContent = info.title;
+      document.getElementById('pattern-desc').textContent = info.desc;
+    }
+
+    // Button click handlers
+    document.querySelectorAll('.pattern-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchPattern(btn.dataset.pattern);
+      });
+    });
+  </script>
+</body>
+</html>

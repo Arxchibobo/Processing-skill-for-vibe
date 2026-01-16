@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Output files
+output/
+frames/
+*.gif
+*.mp4
+*.webm
+
+# Config (contains local paths)
+config.json
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Processing generated
+**/applet/
+**/application.windows*/
+**/application.macosx/
+**/application.linux*/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test output
+test-output/
+
+# Temporary files
+*.tmp
+*.temp
