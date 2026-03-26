@@ -1,41 +1,94 @@
 # Processing Creative Skill for Claude Code
 
-🎨 **Generate stunning graphics, animations, and generative art using Processing/p5.js directly from Claude Code.**
+**Generate stunning graphics, animations, and generative art using Processing/p5.js — directly from Claude Code.**
 
-Transform your frontend design, presentations, and web applications with creative coding capabilities.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-green)](https://nodejs.org/)
+[![p5.js](https://img.shields.io/badge/p5.js-1.9.4-ED225D)](https://p5js.org/)
+[![Processing](https://img.shields.io/badge/Processing-4.x-006699)](https://processing.org/)
+
+## Overview
+
+This is a Claude Code skill that brings creative coding into your AI-assisted workflow. Install it once, then describe what you want — particle systems, flow fields, data visualizations, animated backgrounds — and Claude generates ready-to-run Processing or p5.js code.
+
+It includes:
+- A Claude Code skill definition that activates on creative coding keywords
+- A reusable pattern library (6 modules covering common generative art patterns)
+- Framework integration templates for React, Vue, and standalone HTML
+- Automation scripts to run sketches, export frames, and convert to GIF/MP4/WebM
+- Example sketches in Processing (Java) ready to run
 
 ## Features
 
-- **p5.js Web Integration** - Generate animated backgrounds, data visualizations, and interactive elements for web
-- **Processing Java Sketches** - Create high-resolution graphics and video exports
-- **Pattern Library** - Ready-to-use generative art patterns (flow fields, particles, geometric grids)
-- **React/Vue Components** - Drop-in components for modern frameworks
-- **Automation Scripts** - Run sketches, export frames, convert to GIF/MP4
+| Capability | Details |
+|---|---|
+| **p5.js web components** | Animated backgrounds, interactive elements, data visualizations |
+| **Processing Java sketches** | High-resolution (up to 4K) graphics and frame exports |
+| **Pattern library** | Flow fields, particle systems, geometric grids, waves, gradients, charts |
+| **Framework templates** | React (TypeScript), Vue 3, standalone HTML |
+| **Color themes** | 16 built-in palettes (Neon Night, Cyberpunk, Synthwave, Pastel, and more) |
+| **Export pipeline** | PNG, GIF, MP4, WebM via FFmpeg automation scripts |
+| **Cross-platform scripts** | Bash and PowerShell versions for all automation |
 
-## Quick Start
+## Project Structure
 
-### Installation
+```
+Processing-skill-for-vibe/
+├── skill/
+│   └── processing-creative.md     # Claude Code skill definition
+├── patterns/
+│   ├── color-themes.js            # 16 color palettes + utilities
+│   ├── flow-field.js              # Perlin noise particle flow
+│   ├── geometric-grid.js          # Mouse-reactive shape grids
+│   ├── gradient-backgrounds.js    # Linear, radial, mesh, aurora effects
+│   ├── waves-animation.js         # Sine waves, ripples, waveforms
+│   └── data-visualization.js     # Bar, line, pie, donut charts
+├── templates/
+│   ├── landing-page-hero.html     # Full page with animated background
+│   ├── pattern-showcase.html      # Interactive demo of all 5 patterns
+│   ├── react-p5-component.tsx     # TypeScript React component
+│   └── vue-p5-component.vue       # Vue 3 composition API component
+├── examples/
+│   ├── flowfield/flowfield.pde    # High-res flow field (1920×1080)
+│   └── particles/particles.pde   # Particle system with gravity/physics
+├── scripts/
+│   ├── run-sketch.sh              # Run Processing sketches (Bash)
+│   ├── run-sketch.ps1             # Run Processing sketches (PowerShell)
+│   ├── convert-frames.sh          # Export frames → GIF/MP4/WebM
+│   └── install-processing.js     # Installation helper
+├── docs/
+│   ├── COMMANDS.md                # Full command reference
+│   └── INSTALLATION.md           # Detailed setup guide
+└── package.json
+```
+
+## Installation
+
+### 1. Clone the repository
 
 ```bash
-# Clone or copy the skill folder
-git clone https://github.com/yourusername/processing-creative-skill.git
-
-# Navigate to project
-cd processing-creative-skill
-
-# Install dependencies
+git clone https://github.com/Arxchibobo/Processing-skill-for-vibe.git
+cd Processing-skill-for-vibe
 npm install
-
-# Run setup (checks Processing installation)
 npm run setup
 ```
 
-### Install Processing (Optional, for Java features)
+### 2. Install the Claude Code skill
+
+```bash
+# Install globally (available in all projects)
+cp skill/processing-creative.md ~/.claude/skills/
+
+# Or install per-project
+cp skill/processing-creative.md .claude/skills/
+```
+
+### 3. Install Processing (optional — for Java sketch features)
 
 **Windows:**
 ```bash
 choco install processing
-# OR download from https://processing.org/download/
+# or download from https://processing.org/download/
 ```
 
 **macOS:**
@@ -46,140 +99,41 @@ brew install --cask processing
 **Linux:**
 ```bash
 # Download from https://processing.org/download/
-tar -xzf processing-*.tgz
-cd processing-* && ./install.sh
+tar -xzf processing-*.tgz && cd processing-* && ./install.sh
 ```
 
-### For Claude Code Integration
+### 4. Install FFmpeg (optional — for video export)
 
-Copy the skill file to your Claude Code skills directory:
-
-```bash
-# Windows
-cp skill/processing-creative.md ~/.claude/skills/
-
-# Or add to your project's .claude/skills/ folder
-```
+Required only for converting frame sequences to GIF/MP4/WebM. See `docs/INSTALLATION.md` for platform-specific instructions.
 
 ## Usage
 
-### Invoke the Skill
+### Activating the skill
 
-In Claude Code, the skill auto-activates when you mention:
-- "processing", "p5.js", "generative art"
-- "animated background", "particle system"
-- "creative coding", "visual design code"
+The skill auto-activates in Claude Code when your prompt includes keywords like:
+- `processing`, `p5.js`, `generative art`
+- `animated background`, `particle system`
+- `creative coding`, `visual design code`
 
-### Example Prompts
+### Example prompts
 
 ```
 "Create an animated particle background for my landing page"
 
 "Generate a flow field visualization with Perlin noise"
 
-"Design a data visualization for this sales data: [65, 59, 80, 81, 56]"
+"Design an animated bar chart for this data: [65, 59, 80, 81, 56]"
 
 "Make a geometric grid animation that responds to mouse movement"
 
-"Create a loading animation as a GIF"
+"Build a gradient background with an aurora effect"
+
+"Create a loading animation and export it as a GIF"
 ```
 
-## Project Structure
+### Framework integration
 
-```
-processing-creative-skill/
-├── skill/
-│   └── processing-creative.md    # Claude Code skill definition
-├── scripts/
-│   ├── run-sketch.ps1            # Run Processing sketches (Windows)
-│   ├── run-sketch.sh             # Run Processing sketches (Unix)
-│   ├── convert-frames.sh         # Convert frames to GIF/MP4
-│   └── install-processing.js     # Installation helper
-├── templates/
-│   ├── landing-page-hero.html    # Full landing page with animated bg
-│   └── react-p5-component.tsx    # React component template
-├── patterns/
-│   ├── flow-field.js             # Perlin noise flow field
-│   ├── geometric-grid.js         # Interactive geometric grid
-│   └── data-visualization.js     # Charts and graphs
-├── examples/                      # Example sketches
-├── docs/                          # Additional documentation
-├── package.json
-└── README.md
-```
-
-## Pattern Library
-
-### 1. Particle Systems
-Interactive particles with connections, trails, and physics.
-
-```javascript
-// Usage in p5.js
-// See patterns/particles.js
-```
-
-### 2. Flow Fields
-Organic flowing lines using Perlin noise.
-
-```javascript
-// Usage in p5.js
-// See patterns/flow-field.js
-```
-
-### 3. Geometric Grids
-Responsive grids of shapes that react to input.
-
-```javascript
-// Usage in p5.js
-// See patterns/geometric-grid.js
-```
-
-### 4. Data Visualizations
-Animated bar charts, line charts, and pie charts.
-
-```javascript
-// Usage in p5.js
-// See patterns/data-visualization.js
-```
-
-## Scripts
-
-### Run a Processing Sketch
-
-**PowerShell (Windows):**
-```powershell
-.\scripts\run-sketch.ps1 -SketchPath "path\to\sketch"
-.\scripts\run-sketch.ps1 -SketchPath "path\to\sketch" -Export
-.\scripts\run-sketch.ps1 -SketchPath "path\to\sketch" -Present
-```
-
-**Bash (Unix/Git Bash):**
-```bash
-./scripts/run-sketch.sh path/to/sketch
-./scripts/run-sketch.sh path/to/sketch --export
-./scripts/run-sketch.sh path/to/sketch --present
-```
-
-### Convert Frames to Video
-
-```bash
-# Convert to GIF
-./scripts/convert-frames.sh frames/ output --gif
-
-# Convert to MP4
-./scripts/convert-frames.sh frames/ output --mp4
-
-# Convert all formats
-./scripts/convert-frames.sh frames/ output --all
-
-# Custom options
-./scripts/convert-frames.sh frames/ output --fps 60 --scale 1920:-1
-```
-
-## Integration Examples
-
-### Landing Page Hero
-
+**HTML (standalone):**
 ```html
 <!DOCTYPE html>
 <html>
@@ -189,18 +143,15 @@ Animated bar charts, line charts, and pie charts.
 <body>
   <div id="hero">
     <div id="p5-canvas"></div>
-    <div class="hero-content">
-      <h1>Welcome</h1>
-    </div>
+    <div class="hero-content"><h1>Welcome</h1></div>
   </div>
   <script src="patterns/flow-field.js"></script>
 </body>
 </html>
 ```
 
-### React Component
-
-```jsx
+**React (TypeScript):**
+```tsx
 import ParticleBackground from './templates/react-p5-component';
 
 function App() {
@@ -213,34 +164,61 @@ function App() {
 }
 ```
 
-### Data Visualization
+**Vue 3:**
+```vue
+<template>
+  <ParticleBackground :particle-count="100" />
+</template>
 
-```javascript
-// Animated bar chart
-const data = [65, 59, 80, 81, 56, 55, 40];
-const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+<script setup>
+import ParticleBackground from './templates/vue-p5-component.vue';
+</script>
+```
 
-function draw() {
-  drawBarChart(window, {
-    data,
-    labels,
-    colors: ['#FF6384', '#36A2EB', '#FFCE56']
-  });
-}
+## Scripts
+
+### Run a Processing sketch
+
+**Bash:**
+```bash
+./scripts/run-sketch.sh path/to/sketch           # Run
+./scripts/run-sketch.sh path/to/sketch --export  # Run + export frames
+./scripts/run-sketch.sh path/to/sketch --present # Fullscreen presentation mode
+```
+
+**PowerShell:**
+```powershell
+.\scripts\run-sketch.ps1 -SketchPath "path\to\sketch"
+.\scripts\run-sketch.ps1 -SketchPath "path\to\sketch" -Export
+.\scripts\run-sketch.ps1 -SketchPath "path\to\sketch" -Present
+```
+
+### Convert frame sequences to video
+
+```bash
+./scripts/convert-frames.sh frames/ output --gif          # GIF
+./scripts/convert-frames.sh frames/ output --mp4          # MP4
+./scripts/convert-frames.sh frames/ output --all          # All formats
+./scripts/convert-frames.sh frames/ output --fps 60 --scale 1920:-1
+```
+
+### NPM scripts
+
+```bash
+npm run dev      # Start live-server for p5.js development
+npm run setup    # Check Processing/FFmpeg installation
 ```
 
 ## Export Options
 
-### Save PNG (p5.js)
+**PNG from p5.js:**
 ```javascript
 function keyPressed() {
-  if (key === 's') {
-    saveCanvas('design', 'png');
-  }
+  if (key === 's') saveCanvas('design', 'png');
 }
 ```
 
-### Save GIF (p5.js)
+**GIF from p5.js:**
 ```javascript
 function setup() {
   createCanvas(400, 400);
@@ -248,28 +226,24 @@ function setup() {
 }
 ```
 
-### Save Frame Sequence
+**Frame sequence (for high-quality video export):**
 ```javascript
 function draw() {
-  // ... drawing code
-  if (frameCount <= 300) {
-    saveCanvas('frame-' + nf(frameCount, 4), 'png');
-  }
+  // drawing code...
+  if (frameCount <= 300) saveCanvas('frame-' + nf(frameCount, 4), 'png');
 }
 ```
 
-### Convert to Video
+**Convert frames to video:**
 ```bash
-# Using the included script
 ./scripts/convert-frames.sh ./frames output --mp4 --fps 60
-
-# Or manually with ffmpeg
+# or manually:
 ffmpeg -r 60 -i frames/frame-%04d.png -c:v libx264 output.mp4
 ```
 
 ## Color Palettes
 
-Built-in palettes for quick use:
+16 built-in palettes are available in `patterns/color-themes.js`:
 
 ```javascript
 // Neon Night
@@ -281,9 +255,11 @@ const PASTEL = ['#FFB5A7', '#FCD5CE', '#F8EDEB', '#F9DCC4', '#FEC89A'];
 // Dark Tech
 const TECH = ['#0D1B2A', '#1B263B', '#415A77', '#778DA9', '#E0E1DD'];
 
-// Nature
+// Forest
 const NATURE = ['#606C38', '#283618', '#FEFAE0', '#DDA15E', '#BC6C25'];
 ```
+
+Other palettes: Cyberpunk, Synthwave, Tropical, Dreamy Pink, Mint Fresh, Lavender Mist, Midnight, Deep Ocean, Sunset, Ocean, Autumn, Grayscale, Blue/Red Monochrome.
 
 ## Dependencies
 
@@ -291,31 +267,25 @@ const NATURE = ['#606C38', '#283618', '#FEFAE0', '#DDA15E', '#BC6C25'];
 - Node.js >= 18
 
 **Optional:**
-- Processing 4.x (for Java features)
-- FFmpeg (for video export)
+- Processing 4.x — for `.pde` Java sketch features
+- FFmpeg — for converting frame sequences to GIF/MP4/WebM
 
-**NPM Packages:**
-- `p5` - p5.js library
-- `live-server` - Local development server
-- `puppeteer` - Headless browser for testing
-
-## Inspiration
-
-Follow these Processing masters for creative inspiration:
-- [@yuruyurau](https://x.com/yuruyurau) - Geometric patterns, minimalist animations
-- [@KomaTebe](https://x.com/KomaTebe) - Complex generative systems
+**NPM packages:**
+- `p5` ^1.9.4
+- `live-server` (dev)
+- `puppeteer` (dev)
 
 ## Resources
 
 - [Processing Reference](https://processing.org/reference/)
 - [p5.js Reference](https://p5js.org/reference/)
-- [p5.js Editor](https://editor.p5js.org/)
-- [The Coding Train](https://thecodingtrain.com/) - Tutorials
+- [p5.js Web Editor](https://editor.p5js.org/)
+- [The Coding Train](https://thecodingtrain.com/) — tutorials by Daniel Shiffman
 
 ## License
 
-MIT License - Free to use, modify, and distribute.
+MIT License — free to use, modify, and distribute.
 
 ---
 
-**Made with 🎨 for creative coding with Claude Code**
+Made by [Bobo Zhou (Arxchibobo)](https://github.com/Arxchibobo)
